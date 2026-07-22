@@ -48,9 +48,14 @@ python test_booking.py
 ```
 
 ## Menjalankan dari IDE (VSCode)
-
+## Menjalankan dari IDE (VSCode)
 1. Buka folder `/Users/RioZ/Ayo_technical_test`.
 2. Pilih interpreter Python: `.venv/bin/python`.
 3. Buka file `booking_qa/test_booking.py`.
 4. Untuk menjalankan semua test: gunakan panel Test Explorer atau jalankan perintah `pytest booking_qa/test_booking.py -q` di terminal.
 5. Untuk debug: klik di sebelah nomor baris untuk menambahkan breakpoint, lalu pilih `Run > Start Debugging`.
+
+## Catatan Hasil Test
+Saat ini ada 2 test yang sengaja diharapkan **FAIL** untuk mendeteksi bug booking:
+- Harga booking `BK/000001` tidak sesuai jadwal.
+- Double booking antar booking di venue/tanggal/waktu yang sama.
