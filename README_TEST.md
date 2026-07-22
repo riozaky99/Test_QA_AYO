@@ -1,6 +1,6 @@
 # AYO Technical Test - Automation QA
 
-Repo ini berisi automation test untuk studi kasus QA AYO Technical Test, meliputi validasi booking dan web checks untuk situs `ayo.co.id`.
+Repo ini berisi automation test untuk studi kasus QA AYO Technical Test, meliputi validasi booking, web checks, dan skenario mobile app.
 
 ## Studi Kasus 1 - Booking Validation
 
@@ -20,7 +20,9 @@ Kedua masalah ini dapat terdeteksi lebih awal menggunakan automation test dalam 
 | SC-03 | Booking di slot yang tidak ada | Sistem menolak / tidak valid |
 | SC-04 | Booking tidak overlap dengan booking lain | Sistem menerima booking |
 
-## Test Scenario - Website AYO (`ayo.co.id`)
+## Studi Kasus 2 - Web Checks (`ayo.co.id`)
+
+Automation test untuk website AYO menggunakan Playwright dan static HTML checks.
 
 ### `/venues` - Daftar Venue
 - Venue listing menampilkan jumlah venue tersedia.
@@ -34,13 +36,34 @@ Kedua masalah ini dapat terdeteksi lebih awal menggunakan automation test dalam 
 - Daftar event mabar tampil.
 - Tombol `Cari mabar` dan `Filter` tersedia.
 - Navigasi pagination event aktif.
+- Mobile viewport `375x812` divalidasi.
+
+## Studi Kasus 3 - Mobile App AYO
+
+Skenario pengujian untuk aplikasi mobile AYO di iOS.
+
+### Book Venue Booking
+- Search venue
+- Filter cabang olahraga dan kota
+- Pilih tanggal dan slot waktu
+- Verifikasi harga
+- Pembayaran
+
+### Create Game Time
+- Buat game time baru
+- Isi detail cabang olahraga, tanggal, waktu, lokasi, kuota
+- Publish dan verifikasi tampil di daftar
+- Join game time
 
 ## Struktur File
 
-- `booking_qa/test_scenario.md` - Dokumen test scenario booking validation.
+- `booking_qa/test_scenario.md` - Dokumen test scenario Studi Kasus 1.
 - `booking_qa/test_booking.py` - Kasus test berbasis database SQLite.
-- `booking_qa/test_web_ayo.py` - Automation web checks menggunakan Playwright.
+- `booking_qa/test_web_ayo.py` - Automation web checks menggunakan Playwright untuk Studi Kasus 2.
 - `booking_qa/test_ayo_static.py` - Static HTML checks untuk halaman AYO.
+- `booking_qa/test_scenario_venues.md` - Test scenario lanjutan untuk `/venues`.
+- `booking_qa/test_scenario_ayo_mobile.md` - Test scenario untuk mobile app AYO (Studi Kasus 3).
+- `booking_qa/AYOiOS/` - Kerangka XCUITest project untuk iOS native automation.
 - `booking_qa/db_setup.py` - Fungsi inisialisasi database.
 - `booking_qa/schema.sql` - Definisi tabel booking.
 - `booking_qa/seed.sql` - Data seed untuk reproduksi masalah.
@@ -50,7 +73,7 @@ Kedua masalah ini dapat terdeteksi lebih awal menggunakan automation test dalam 
 
 - Python 3.11+
 - Virtualenv sudah dibuat di `.venv`
-- Dependesi: `pytest`
+- Dependensi: `pytest`
 - Browser untuk Playwright: `playwright install chromium`
 
 ## Menjalankan Test
