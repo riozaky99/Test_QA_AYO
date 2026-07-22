@@ -1,60 +1,51 @@
-# Dokumentasi Penggunaan Automation Test
+# Dokumentasi Penggunaan Automation Test - AYO Technical Test
 
-## 1. Python (pytest)
+## Versi Python yang digunakan
+- Python 3.11.15
+- Pytest 9.1.1
+- SQLite3 (built-in)
 
-### Instalasi
-```bash
-pip3.11 install pytest
+## Test Case: Studi Kasus 1
+Memastikan:
+- Booking price sesuai slot jadwal (`venue_slots`)
+- Double booking terdeteksi untuk `venue_id + date + rentang waktu`
+
+## Struktur Folder
+```
+booking_qa/
+├── __init__.py
+├── db_setup.py        # Init schema + seed SQLite
+├── schema.sql         # DDL untuk bookings + venue_slots
+├── seed.sql           # Data sample (mencerminkan bug harga + double booking)
+├── test_booking.py    # Test suite berbasis DB
+└── test.db            # SQLite database (dibuat otomatis)
 ```
 
-### Menjalankan Test
+## Setup Database
 ```bash
-python3.11 -m pytest /Users/RioZ/Ayo_technical_test/test_booking.py -v
+python3.11 booking_qa/db_setup.py
 ```
 
-### Daftar Test Case
-- `test_booking_price_matches_schedule` — Validasi harga booking sesuai harga slot jadwal
-- `test_double_booking_detected` — Deteksi booking ganda di venue/date/waktu yang sama
-- `test_non_overlapping_booking_accepted` — Pastikan booking tanpa overlap diterima
-- `test_slot_not_found_rejected` — Pastikan booking di slot tidak valid ditolak
-
-### Cara Menambahkan Data Baru
-Edit bagian `BOOKINGS` dan `SCHEDULE` di awal file.
-Format waktu harus `HH:MM:SS` dan tanggal `YYYY-MM-DD`.
-
----
-
-## 2. JavaScript (Cypress)
-
-### Instalasi
+## Menjalankan Test
 ```bash
-cd /Users/RioZ/Ayo_technical_test/cypress
-npm install
+python3.11 -m pytest booking_qa/test_booking.py -v
 ```
 
-### Menjalankan Test (GUI)
-```bash
-npm run cypress:open
+Expected result:
+```
+FAILED booking_qa/test_booking.py::TestBookingPriceValidation::test_price_should_match_schedule
+  -> Harga booking BK/000001 salah (expected 1000000, got 1200000)
+PASSED booking_qa/test_booking.py::TestBookingPriceValidation::test_double_booking_detected
+PASSED booking_qa/test_booking.py::TestBookingPriceValidation::test_no_double_booking_when_slot_available
+PASSED booking_qa/test_booking.py::TestBookingPriceValidation::test_price_invalid_for_slot
 ```
 
-### Menjalankan Test (Headless)
+## Menambahkan Data Baru
+Edit `booking_qa/seed.sql`, lalu jalankan ulang:
 ```bash
-npm run cypress:run
+python3.11 booking_qa/db_setup.py  # overwrite test.db
 ```
-
-### Konfigurasi
-- `cypress.config.js` — Ganti `baseUrl` dengan URL aplikasi kamu
-- `cypress/e2e/booking-validation.cy.js` baris 7 — Ganti `BOOKING_API` dengan endpoint API booking kamu
-
-### Daftar Test Case
-- `TC-001/TC-002` — Harga booking sesuai schedule
-- `TC-003/TC-007` — Deteksi double booking
-- `TC-004` — Booking tanpa overlap valid
-- `TC-005` — Slot tidak ada ditolak
-- **Integration** — API rejected duplikat & harga salah
-
----
 
 ## Catatan
-Pastikan server FastAPI kamu berjalan sebelum menjalankan Cypress integration test.
-Python tidak butuh server, hanya data dalam file.
+- Jika folder migration terpisah, tambahkan ke `schema.sql`
+- Semua test berbasis SQLite (`booking_qa/test.db`), tidak perlu server FastAPI
